@@ -28,13 +28,13 @@ export class UsersController {
 
   //Delete Users
   @Delete('/deleteUsers/:id')
-  deleteUsers(@Param('id') id: string): string {
+  deleteUsers(@Param('id') id: string): {} {
     return this.userServices.DeleteUser(id);
   }
 
   //Update Users
-  @Put('/updateUsers')
-  updateUsers(): string {
-    return this.userServices.UpdateUser();
+  @Put('/updateUsers/:id')
+  updateUsers(@Param('id') id: string, @Body() user: UserDto): {} {
+    return this.userServices.UpdateUser(id, user);
   }
 }

@@ -12,23 +12,47 @@ export class UserServices {
     this.user.push(user);
     return 'user added successfully';
   }
+
   GetUser(): UserDto[] {
     return this.user;
   }
-  DeleteUser(id: string): string {
-    //filtering the user by id from the array of objects
-    const delUserIndex = this.user.filter((currentObj) => {
-      if (currentObj.id === id) return this.user.indexOf(currentObj);
-    });
-    console.log(
-      '🚀 ~ file: user.service.ts:23 ~ UserServices ~ delUserIndex ~ delUserIndex',
-      delUserIndex,
-    );
 
-    // if(delUserIndex) this.user.splice(delUserIndex,1);
-    return 'user deleted successfully';
+  DeleteUser(id: string): {} {
+    const delUserObject = this.user.filter((user) => {
+      if (user.id === id) return user;
+    });
+
+    this.user.map((value: UserDto) => {
+      if (value.id === id) {
+        return this.user.splice(this.user.indexOf(value), 1);
+      }
+    });
+
+    return {
+      comment: 'user deleted successfully',
+      deletedUser: delUserObject,
+    };
   }
-  UpdateUser(): string {
-    return 'user is updatedd';
+
+  UpdateUser(id: string, user: UserDto): {} {
+    if (id && user) {
+      const delUserObject = this.user.filter((user) => {
+        if (user.id === id) return user;
+      });
+
+      this.user.map((item: UserDto) => {
+        if (item.id === id) {
+          item.name = user.name;
+          item.password = user.password;
+        }
+      });
+
+      return {
+        comment: 'user updated successfully',
+        updatedUser: delUserObject,
+      };
+    } else {
+      return { error: 'empty input field' };
+    }
   }
 }
