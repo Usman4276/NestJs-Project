@@ -1,4 +1,10 @@
-import { Module } from '@nestjs/common';
+import {
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+  RequestMethod,
+} from '@nestjs/common';
+import { UserMiddleware } from './middleware/user.middleware';
 import { UserServices } from './user.service';
 import { UsersController } from './users.controller';
 
@@ -8,8 +14,14 @@ import { UsersController } from './users.controller';
   controllers: [UsersController],
   exports: [],
 })
-export class UsersModule {
+export class UsersModule implements NestModule {
   constructor() {
-    console.log('UsersModule');
+    console.log('UsersModule constructor...');
+  }
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(UserMiddleware)
+      .exclude({ path: 'users/getUsers', method: RequestMethod.GET })
+      .forRoutes(UsersController);
   }
 }
